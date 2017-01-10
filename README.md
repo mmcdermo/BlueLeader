@@ -13,6 +13,7 @@ BlueLeader [-h] (--production | --dev) config.json
 
 ## Sample Config
 
+blue_leader.json:
 ```json
 {
     "region": "us-west-1",
@@ -25,9 +26,20 @@ BlueLeader [-h] (--production | --dev) config.json
 }
 ```
 
+webpack-config.template:
+``` javascript
+module.exports = {
+    output: {
+        publicPath: '{public_path}',
+	...
+    },
+    ...
+}
+```
+
 ## Overview
 
- * Generates a webpack config, setting the publicPath appropriately
+ * Generates a webpack config, setting  appropriately
  * Runs webpack on the generated config.
  * Uploads local static assets from 'local_static_folder' to 
   'destination_bucket'/'destination_folder'
