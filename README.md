@@ -17,7 +17,7 @@ blue_leader.json:
 ```json
 {
     "region": "us-west-1",
-    "webpack_config_template": "webpack-config.prod.js.template",
+    "webpack_config_template": "webpack-config.template",
     "prod_destination_bucket": "myproject-static-assets",
     "dev_destination_bucket": "myproject-static-assets-dev",
     "destination_folder": "static",
