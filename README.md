@@ -39,7 +39,8 @@ module.exports = {
 
 ## Overview
 
- * Generates a webpack config, setting  appropriately
+ * Generates a webpack config, replacing {public_path} with the path to either
+   an S3 bucket or CloudFront
  * Runs webpack on the generated config.
  * Uploads local static assets from 'local_static_folder' to 
   'destination_bucket'/'destination_folder'
