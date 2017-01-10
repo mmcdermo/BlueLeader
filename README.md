@@ -5,6 +5,19 @@ Automated Webpack Deployment to S3/CloudFront
 ```
 deploy.py [-h] (--production | --dev) config.json
 ```
+## Sample Config
+
+```json
+{
+    "region": "us-west-1",
+    "webpack_config_template": "webpack-config.prod.js.template",
+    "prod_destination_bucket": "myproject-static-assets",
+    "dev_destination_bucket": "myproject-static-assets-dev",
+    "destination_folder": "static",
+    "local_static_folder": "./static/bundles/",
+    "aws_profile": "my_profile"
+}
+```
 
 ## Overview
 
