@@ -1,10 +1,16 @@
 # BlueLeader
 Automated Webpack Deployment to S3/CloudFront
 
+## Installation
+```
+pip install BlueLeader
+```
+
 ## Usage
 ```
-deploy.py [-h] (--production | --dev) config.json
+BlueLeader [-h] (--production | --dev) config.json
 ```
+
 ## Sample Config
 
 ```json
