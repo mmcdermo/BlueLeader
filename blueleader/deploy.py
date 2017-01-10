@@ -3,8 +3,8 @@ import os
 import json
 import argparse
 import subprocess
-from webpack import WebpackManager
-from s3 import S3Manager
+from blueleader.webpack import WebpackManager
+from blueleader.s3 import S3Manager
 
 """
 Frontend deployment script. 
@@ -21,15 +21,6 @@ usage: deploy.py [-h] (--production | --dev) config.json
 - Updates index.html in the given s3 bucket, generating index.html from 
 a templated index file given the current bundle name and location.
 """
-
-# Settings
-region = "us-west-1"
-webpack_config_template = 'webpack-config.prod.js.template'
-prod_destination_bucket = "signal-static-assets"
-dev_destination_bucket = "signal-static-assets-dev"
-destination_folder = "static"
-local_static_folder = "./static/bundles/"
-aws_profile = "signal"
 
 def main():
     parser = argparse.ArgumentParser()
