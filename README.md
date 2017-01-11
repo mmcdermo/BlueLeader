@@ -22,6 +22,8 @@ blue_leader.json:
     "dev_destination_bucket": "myproject-static-assets-dev",
     "destination_folder": "static",
     "local_static_folder": "./static/bundles/",
+    "prod_cdn_uri": "https://d1zb5pxxbn6h4.cloudfront.net/",
+    "dev_cdn_uri": "https://d1z8t32jvvn.cloudfront.net/",	
     "aws_profile": "my_profile"
 }
 ```

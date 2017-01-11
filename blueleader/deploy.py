@@ -45,23 +45,32 @@ def main():
         if k not in config:
             raise Exception("Required config paramter %s not in config file %s" (k, args.config_file))
         
-    # Determine our destination bucket
+    # Determine our destination bucket and public path
     destination_bucket = None
+    public_path = None
+    public_path = "https://s3-%s.amazonaws.com/%s/%s/" %\
+                                            (config['region'],
+                                             destination_bucket,
+                                             config['destination_folder'])
+    
     if args.production is True:
         print("Deploying for production...")
         destination_bucket = config['prod_destination_bucket']
+        if "prod_cdn_uri" in config:
+            public_path = config["prod_cdn_uri"]
     elif args.dev is True:
         print("Deploying for development...")
         destination_bucket = config['dev_destination_bucket']
+        if "dev_cdn_uri" in config:
+            public_path = config["dev_cdn_uri"]
     else:
         raise Exception("Neither production nor dev flags set")
 
+    print("All assets will reference the static URI: %s" % public_path)
+        
     webpack = WebpackManager(config['webpack_config_template'],
-                             public_path = ("https://s3-%s.amazonaws.com/%s/%s/" %\
-                                            (config['region'], destination_bucket,
-                                             config['destination_folder'])))
+                             public_path = public_path)
     # Generate webpack config, run webpack and gather stats
-    webpack.generate_webpack_config()
     print("================ Running Webpack =================")
     res = webpack.run_webpack()
     print(res)
@@ -69,14 +78,21 @@ def main():
     current_bundle = webpack.current_bundle()
 
     # Upload generated and static assets to S3
+    index_output_file = "index.html.out"
     s3 = S3Manager(config['region'], destination_bucket,
                    config['destination_folder'],
                    config['local_static_folder'],
-                   config['aws_profile'])
+                   config['aws_profile'],
+                   public_path
+    )
     s3.upload_static()
     s3.update_static_routes("index.html.template", "index.html.out",
                             {"bundle_url": current_bundle})
-    s3.upload_file("index.html.out", "index.html", ExtraArgs={'ContentType': "text/html"})
+    s3.upload_file(index_output_file, "index.html", ExtraArgs={'ContentType': "text/html"})
+    subprocess.Popen("rm %s" % index_output_file,
+                            shell=True,
+                            stdout=subprocess.PIPE).stdout.read().decode('utf-8')
+    
     
 if __name__ == '__main__':
     main()

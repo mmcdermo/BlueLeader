@@ -19,7 +19,7 @@ class WebpackManager(object):
         stats = self._webpack_stats()
         return stats['chunks']['main'][0]['name']
 
-    def generate_webpack_config(self):
+    def _generate_webpack_config(self):
         """
         Generate a webpack config from a template, replacing variables as necessary
         - {public_path}: Replaced with the given public path for static assests (CDN etc)
@@ -39,9 +39,14 @@ class WebpackManager(object):
         """
         Run webpack using the given config file
         """
-        return subprocess.Popen("webpack --config %s" % self._outfile,
+        self._generate_webpack_config()
+        res = subprocess.Popen("webpack --config %s" % self._outfile,
                                 shell=True,
                                 stdout=subprocess.PIPE).stdout.read().decode('utf-8')
+        subprocess.Popen("rm %s" % self._outfile,
+                                shell=True,
+                                stdout=subprocess.PIPE).stdout.read().decode('utf-8')        
+        return res
 
     def _webpack_stats(self):
         """
