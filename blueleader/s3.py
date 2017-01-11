@@ -16,9 +16,12 @@ class S3Manager(object):
         self._destination_folder = destination_folder
         self._local_static_folder = local_static_folder
         self._url_override = url_override
-        
-        session = boto3.Session(profile_name=aws_profile,
-                                region_name=aws_region)
+
+        try:
+            session = boto3.Session(profile_name=aws_profile,
+                                    region_name=aws_region)
+        except:
+            session = boto3.Session(region_name=aws_region)
         self._s3_client = session.client('s3')
         
     def upload_static(self, ignore=[]):
