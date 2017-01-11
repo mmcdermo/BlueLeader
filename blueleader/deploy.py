@@ -76,7 +76,7 @@ def main():
     print(res)
     print("==================================================")
     current_bundle = webpack.current_bundle()
-
+    print("Current webpack bundle: %s" % current_bundle)
     # Upload generated and static assets to S3
     index_output_file = "index.html.out"
     s3 = S3Manager(config['region'], destination_bucket,
@@ -86,6 +86,7 @@ def main():
                    public_path
     )
     s3.upload_static()
+    print("Generating and uploading new index file")
     s3.update_static_routes("index.html.template", "index.html.out",
                             {"bundle_url": current_bundle})
     s3.upload_file(index_output_file, "index.html", ExtraArgs={'ContentType': "text/html"})

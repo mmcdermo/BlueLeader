@@ -43,7 +43,7 @@ class S3Manager(object):
         the url_override parameter if set (for CDN etc)
         """
         if self._url_override is None:
-            return "https://s3-%s.amazonaws.com/%s/%s/%s" %\
+            return "https://s3-%s.amazonaws.com/%s/%s/%s/" %\
                              (self._aws_region,
                               self._destination_bucket,
                               self._destination_folder)
@@ -58,13 +58,14 @@ class S3Manager(object):
         if mapping = {"bundle_url": "main-ec1246.js"} 
         then we'll transform {bundle_url} into 
           https://s3-us-west-1.amazonaws.com/bucket/folder/main-ec1246.js
+          or url_override + "main-ec1256.js"
         """
-        # Generate and upload new index file referencing bundle
+        # Generate and new file referencing asset locations
         with open(template_file, 'r') as fp:
             template = fp.read()
             rendered = template
             for item in mapping:
-                item_url = "%s/%s" % (self.public_url(), mapping[item])
+                item_url = "%s%s" % (self.public_url(), mapping[item])
                 rendered = template.replace("{%s}" % item, item_url)
             with open(output_file, 'w') as fp:
                 fp.write(rendered)
