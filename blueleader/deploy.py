@@ -93,7 +93,6 @@ def main():
                    ExtraArgs={'ContentType': "text/html",
                               'CacheControl': "max-age=60"
                    })
-    max-age=604800
     subprocess.Popen("rm %s" % index_output_file,
                             shell=True,
                             stdout=subprocess.PIPE).stdout.read().decode('utf-8')
