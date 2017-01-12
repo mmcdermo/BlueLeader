@@ -89,7 +89,11 @@ def main():
     print("Generating and uploading new index file")
     s3.update_static_routes("index.html.template", "index.html.out",
                             {"bundle_url": current_bundle})
-    s3.upload_file(index_output_file, "index.html", ExtraArgs={'ContentType': "text/html"})
+    s3.upload_file(index_output_file, "index.html",
+                   ExtraArgs={'ContentType': "text/html",
+                              'CacheControl': "max-age=60"
+                   })
+    max-age=604800
     subprocess.Popen("rm %s" % index_output_file,
                             shell=True,
                             stdout=subprocess.PIPE).stdout.read().decode('utf-8')
