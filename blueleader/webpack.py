@@ -6,7 +6,7 @@ class WebpackManager(object):
     def __init__(self,
                  webpack_config_template,
                  public_path,
-                 stats_file = "webpack-stats-prod.json"):
+                 stats_file = "webpack-stats.json"):
         self._webpack_config_template = webpack_config_template
         self._public_path = public_path
         self._outfile = "generated-webpack-config.out"
