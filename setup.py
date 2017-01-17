@@ -6,7 +6,7 @@ install_requires = [
 
 setup(
     name='BlueLeader',
-    version='0.32.5',
+    version='0.32.6',
     description='An automated Webpack deployment tool for S3 & CloudFront',
     author='Morgan McDermott',
     author_email='morganmcdermott@gmail.com',
