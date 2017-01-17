@@ -3,7 +3,7 @@ import os
 import json
 import argparse
 import subprocess
-from shutil import copyfile
+import shutil
 from blueleader.webpack import WebpackManager
 from blueleader.s3 import S3Manager
 
@@ -87,10 +87,6 @@ def main():
         x = json.dumps(config)
         f.write("export default %s" %x)
         print("Generated javascript module at %s" % js_module_file)
-
-    if args.local is True:
-        print("Javascript blueleader config module generated. Exiting.")
-        exit(1)
     
     webpack = WebpackManager(webpack_template,
                              public_path = public_path)
@@ -110,10 +106,6 @@ def main():
                    config['aws_profile'],
                    public_path
     )
-    s3.upload_static()
-
-        
-
     s3.update_static_routes("index.html.template", "index.html.out",
                             {"bundle_url": current_bundle})
 
@@ -121,15 +113,15 @@ def main():
         print("Local configuration complete. Exiting")
         shutil.copyfile("index.html.out", "index.html")
         exit(1)
+    else:
+            s3.upload_static()
+            s3.upload_file(index_output_file, "index.html",
+                           ExtraArgs={'ContentType': "text/html",
+                                      'CacheControl': "max-age=60"
+                           })
+            subprocess.Popen("rm %s" % index_output_file,
+                             shell=True,
+                             stdout=subprocess.PIPE).stdout.read().decode('utf-8')
 
-    s3.upload_file(index_output_file, "index.html",
-                   ExtraArgs={'ContentType': "text/html",
-                              'CacheControl': "max-age=60"
-                   })
-    subprocess.Popen("rm %s" % index_output_file,
-                            shell=True,
-                            stdout=subprocess.PIPE).stdout.read().decode('utf-8')
-    
-    
 if __name__ == '__main__':
     main()
